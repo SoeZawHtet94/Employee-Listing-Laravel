@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,59 +18,16 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/user',function(Request $request) {
         return $request->user();
     });
-    Route::get('/employee',function(Request $request) {
-        $emp = [
-            [
-                "name" => "Emp",
-                "email" => "ss@gmail.com",
-                "phone" => "09888888",
-            ],
-            [
-                "name" => "Emp",
-                "email" => "ss@gmail.com",
-                "phone" => "09888888",
-            ],
-            [
-                "name" => "Emp",
-                "email" => "ss@gmail.com",
-                "phone" => "09888888",
-            ],
-            [
-                "name" => "Emp",
-                "email" => "ss@gmail.com",
-                "phone" => "09888888",
-            ],
-        ];
-        return response()->json([
-            'status'=> "OK",
-            'employee'=> $emp
-        ]);
-    });
-    Route::get('/employee/{id}',function(Request $request,$id) {
-        $emp = [
-                "id" => $id,
-                "name" => "Emp",
-                "email" => "ss@gmail.com",
-                "phone" => "09888888",
-        ];
-        return response()->json([
-            'status'=> "OK",
-            'employee'=> $emp
-        ]);
-    });
-    Route::post('/employee-register',function(Request $request) {
+    Route::get('/employee-list',[EmployeeController::class,'employeeList']);
 
-        $emp = [
-                "name" => $request->name,
-                "email" => $request->email,
-        ];
-        return response()->json([
-            'status'=> "OK",
-            'employee'=> $emp
-        ]);
-    });
+    Route::get('/employee/{id}',[EmployeeController::class,'detail']);
+
+    Route::post('/employee-register', [EmployeeController::class,'register']);
+
+    Route::delete('employee-delete/{id}', 'EmployeeController@delete');
 });
